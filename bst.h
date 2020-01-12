@@ -1,8 +1,11 @@
-#include <algorithm>
+#pragma once
+
 #include <iostream>
 #include <iterator>
 #include <memory>
 #include <functional>
+#include <algorithm>
+#include <set>
 
 template <typename T, typename U>
 class __iterator {
@@ -94,6 +97,19 @@ class Tree {
   
   std::unique_ptr<node_t> root;
   const cmp_t lt = cmp_t{};
+  
+  bool is_empty() const { return root.get() == nullptr; }
+
+  iterator median() {
+    auto d = std::distance(begin(), end());
+    if(d == 1)
+      return begin();
+    else {
+      auto m = begin();
+      for(auto n = 0; n < std:: distance(begin(), end()) / 2; ++n) ++m;
+      return m;
+    }
+  }
 
   public:
 
@@ -103,8 +119,6 @@ class Tree {
   Tree& operator=(Tree&&) noexcept = default;
 
   Tree(const Tree& t) { root = std::make_unique<node_t>(*t.root); }
-
-  bool is_empty() const { return root.get() == nullptr; }
 
   iterator begin() noexcept { 
     if( is_empty() )
@@ -173,6 +187,25 @@ class Tree {
     return itr;
   }
 
+  void balance() {
+    std::set s{begin(), end(), 
+      [](data_t x, data_t y){ return x.first < y.first; }};
+    Tree t{};
+    auto median = [&s]() {
+      auto p = s.begin();
+      for(auto n = 0; n < std::distance(s.begin(), s.end()) / 2; ++n) ++p;
+      return *p;
+    };
+
+    while(!s.empty()) {
+      auto data = median();
+      t.emplace(data);
+      s.erase(data);
+    }
+
+    root.swap(t.root);
+  }
+
   template<typename T>
   val_t& operator[](T&& k) noexcept {
     auto elem = emplace(k, val_t{}).first;
@@ -180,7 +213,8 @@ class Tree {
   }
 
   friend std::ostream& operator<<(std::ostream& os, const Tree& t) {
-    for(auto& v : t) os << v.first << " ";
+    for(const auto& v : t) os << v.first << " ";
     return os;
   }
 };
+
