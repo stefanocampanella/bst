@@ -143,10 +143,12 @@ class Tree {
         n->left = std::make_unique<node_t>(x, n);
         return {iterator{n->left.get()}, true};
       }
-      else {
+      else if ( lt(n->data.first, x.first) ) {
         n->right = std::make_unique<node_t>(x, n->up);
         return {iterator{n->right.get()}, true};
       }
+      else
+        return {iterator{n}, false};
     }
   }
 
