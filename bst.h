@@ -100,17 +100,6 @@ class Tree {
   
   bool is_empty() const { return root.get() == nullptr; }
 
-  iterator median() {
-    auto d = std::distance(begin(), end());
-    if(d == 1)
-      return begin();
-    else {
-      auto m = begin();
-      for(auto n = 0; n < std:: distance(begin(), end()) / 2; ++n) ++m;
-      return m;
-    }
-  }
-
   public:
 
   Tree() noexcept = default;
@@ -139,7 +128,7 @@ class Tree {
 
   const_iterator cbegin() const noexcept { 
     if( is_empty() )
-      return iterator{nullptr};
+      return const_iterator{nullptr};
     else
       return const_iterator{root->leftmost()};
   }
@@ -193,7 +182,7 @@ class Tree {
     Tree t{};
     auto median = [&s]() {
       auto p = s.begin();
-      for(auto n = 0; n < std::distance(s.begin(), s.end()) / 2; ++n) ++p;
+      for(auto n = 0; n != std::distance(s.begin(), s.end()) / 2; ++n) ++p;
       return *p;
     };
 
@@ -207,7 +196,7 @@ class Tree {
   }
 
   template<typename T>
-  val_t& operator[](T&& k) noexcept {
+  val_t& operator[](T&& k) {
     auto elem = emplace(k, val_t{}).first;
     return elem->second;
   }

@@ -1,19 +1,18 @@
 #include "bst.h"
-#include <random>
+#include <exception>
 
 int main(){
-  Tree<int, int> t{};
+  try {
 
-  auto rand = 
-    [rng = std::default_random_engine(), 
-    dist = std::uniform_int_distribution<int>(-100,100)]() mutable {
-      return dist(rng);
-    };
+    std::vector test{1,3,4,6,7,8,10,13,14};
+    Tree<int, int> t{};
 
-  for(auto n = 0; n < 20; ++n) t.emplace(rand(), 0);
-  std::cout << t << std::endl;
-  t[90] = 12;
+    for(const auto& x : test) t.emplace(x, 0);
+    std::cout << t << std::endl;
 
-  t.clear();
-  std::cout << t << std::endl;
+  } catch (std::exception& e) {
+    std::cout << e.what() << std::endl;
+  } catch (...) {
+    std::cout << "Error: unknown exception" << std::endl;
+  }
 }
