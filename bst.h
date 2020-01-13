@@ -29,7 +29,7 @@ class __iterator {
       current = current->leftmost();
     }
     else 
-      current = current->up;
+      current = current->next;
     return *this;
   }
 
@@ -46,7 +46,7 @@ struct __node {
   std::unique_ptr<__node> left;
   std::unique_ptr<__node> right;
   data_t data;
-  __node * const up;
+  __node * const next;
 
   __node() = delete;
  
@@ -54,15 +54,17 @@ struct __node {
   __node& operator=(__node&& t) noexcept = default;
   
   __node(const __node& t) :
-    left{nullptr}, right{nullptr}, data{t.data}, up{t.up} {
-      if(t.has_left())  left  = std::make_unique<__node>(*t.left);
-      if(t.has_right()) right = std::make_unique<__node>(*t.right);
+    left{nullptr}, right{nullptr}, data{t.data}, next{t.next} {
+      if(t.has_left())  
+        left = std::make_unique<__node>(t.left->data, this);
+      if(t.has_right()) 
+        right = std::make_unique<__node>(t.right->data, this->next);
     }
 
   __node(const data_t& x, __node * const n) : 
-    left{nullptr}, right{nullptr}, data{x}, up{n} {}
+    left{nullptr}, right{nullptr}, data{x}, next{n} {}
   __node(data_t&& x, __node * const n) : 
-    left{nullptr}, right{nullptr}, data{std::move(x)}, up{n} {}
+    left{nullptr}, right{nullptr}, data{std::move(x)}, next{n} {}
 
   bool has_left()  const noexcept { return left.get() != nullptr; };
   bool has_right() const noexcept { return right.get() != nullptr; };
@@ -147,7 +149,7 @@ class Tree {
         return {iterator{n->left.get()}, true};
       }
       else if ( lt(n->data.first, x.first) ) {
-        n->right = std::make_unique<node_t>(x, n->up);
+        n->right = std::make_unique<node_t>(x, n->next);
         return {iterator{n->right.get()}, true};
       }
       else

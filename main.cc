@@ -10,6 +10,11 @@ int main(){
     for(const auto& x : test) t.emplace(x, 0);
     std::cout << t << std::endl;
 
+    Tree s{t};
+    t.emplace(12, 0);
+
+    std::cout << t << std::endl;
+
   } catch (std::exception& e) {
     std::cout << e.what() << std::endl;
   } catch (...) {
