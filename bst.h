@@ -5,7 +5,6 @@
 #include <memory>
 #include <functional>
 #include <algorithm>
-#include <set>
 
 template <typename T, typename U>
 class __iterator {
@@ -185,14 +184,21 @@ class Tree {
   }
 
   void balance(iterator first, iterator last, Tree& t) {
-    if (std::distance(first, last) == 1)
-      t.emplace(*first);
-    else {
-      auto p = first;
-      for(auto n = 0; n != std::distance(first, last) / 2; ++n) ++p;
-      balance(first, p, t);
-      balance(p, last, t);
+    if (first != last) {
+      auto m = median(first, last);
+      if(first != m)
+        t.emplace(*median(first, m));
+      if(m != last)
+        t.emplace(*median(m, last));
+      balance(first, m, t);
+      balance(m, last, t);
     }
+  }
+
+  iterator median(iterator first, iterator last) {
+    auto m = first;
+    for(auto n = 0; n != std::distance(first, last) / 2; ++n) ++m;
+    return m;
   }
 
   template<typename T>
