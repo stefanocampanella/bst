@@ -1,6 +1,6 @@
 # Binary Search Tree
 
-The class and methods have been implemented in a header only file (`bst.h`), according to the prescribed signature.
+The class and methods have been implemented in a header only file (`bst.h`), according to the prescribed signatures.
 
 The `Tree` class is a wrapper around `__node`, which model the real recursive data structure (although better encapsulation could have been provided in other ways, the `__node` has been implemented as a struct for convenience). 
 
