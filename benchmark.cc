@@ -68,7 +68,8 @@ int main(int argc, char* argv[]) {
       std::vector<std::chrono::nanoseconds::rep> times;
       for(const auto& x : test_cases) {
         auto t1 = std::chrono::high_resolution_clock::now();
-        if (container.find(x.first) == container.end());
+        if (container.find(x.first) == container.end())
+          throw std::runtime_error("Element not found");
         auto t2 = std::chrono::high_resolution_clock::now();
         auto elapsed = 
           std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1);

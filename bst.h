@@ -179,22 +179,20 @@ class Tree {
   }
 
   void balance() {
-    std::set s{begin(), end(), 
-      [](data_t x, data_t y){ return x.first < y.first; }};
     Tree t{};
-    auto median = [&s]() {
-      auto p = s.begin();
-      for(auto n = 0; n != std::distance(s.begin(), s.end()) / 2; ++n) ++p;
-      return *p;
-    };
-
-    while(!s.empty()) {
-      auto data = median();
-      t.emplace(data);
-      s.erase(data);
-    }
-
+    balance(begin(), end(), t);
     root.swap(t.root);
+  }
+
+  void balance(iterator first, iterator last, Tree& t) {
+    if (std::distance(first, last) == 1)
+      t.emplace(*first);
+    else {
+      auto p = first;
+      for(auto n = 0; n != std::distance(first, last) / 2; ++n) ++p;
+      balance(first, p, t);
+      balance(p, last, t);
+    }
   }
 
   template<typename T>
