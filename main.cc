@@ -1,5 +1,6 @@
 #include "bst.h"
 #include <exception>
+#include <vector>
 
 int main(){
   try {
@@ -8,6 +9,7 @@ int main(){
     Tree<int, int> t{};
 
     for(const auto& x : test) t.emplace(x, 0);
+    t.balance();
     std::cout << t << std::endl;
 
     Tree s{t};

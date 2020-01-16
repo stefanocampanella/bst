@@ -177,6 +177,34 @@ class Tree {
     return itr;
   }
 
+  //================================================================
+  //     Better balance recursive algorithm, needs implementation  /
+  //                                                               /
+  //                                                               /
+  //     balance(     *(a)     )   =             *(a)              /
+  //                                                               /
+  //                                                               /
+  //                * (a)                                          /
+  //                 \                           *(b)              /
+  //     balance(     * (b)    )   =            / \                /
+  //                   \                    (a)*   * balance(c)    /
+  //                    * (c)                                      /
+  //                                                               /
+  //                                                               /
+  //                     * (a)                                     /
+  //                    /                                          /
+  //     balance(      * (b)    )  =              * (b)            /
+  //                  /                          / \               /
+  //                 * (c)            balance(c)*   * (a)          /
+  //                                                               /
+  //                                                               /
+  //                    * (a)                     *(a)             /
+  //     balance(      / \       ) =             / \               /
+  //              (b) *   * (c)       balance(b)*   * balance(c)   /
+  //                                                               /
+  //                                                               /
+  //================================================================
+  
   void balance() {
     Tree t{};
     balance(begin(), end(), t);
@@ -184,12 +212,19 @@ class Tree {
   }
 
   void balance(iterator first, iterator last, Tree& t) {
-    if (first != last) {
+    if (std::distance(first, last) > 1) {
+      //std::cout << "=== balance iteration begin ===" << std::endl;
       auto m = median(first, last);
-      if(first != m)
-        t.emplace(*median(first, m));
-      if(m != last)
-        t.emplace(*median(m, last));
+      //std::cout << m->first << std::endl;
+      auto l = median(first, m);
+      //std::cout << l->first << std::endl;
+      auto r = median(m, last);
+      std::cout << r->first << std::endl;
+      //std::cout << "=== balance iteration end ===" << std::endl;
+      if(l != m)
+        t.emplace(*l);
+      if(r != last)
+        t.emplace(*r);
       balance(first, m, t);
       balance(m, last, t);
     }
