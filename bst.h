@@ -65,8 +65,8 @@ struct __node {
   __node(data_t&& x, __node * const n) : 
     left{nullptr}, right{nullptr}, data{std::move(x)}, next{n} {}
 
-  bool has_left()  const noexcept { return left.get() != nullptr; };
-  bool has_right() const noexcept { return right.get() != nullptr; };
+  bool has_left()  const noexcept { return left.get() != nullptr; }
+  bool has_right() const noexcept { return right.get() != nullptr; }
   
   auto leftmost() const noexcept {
     if( !has_left() ) return this;
@@ -78,6 +78,72 @@ struct __node {
     else              return left->leftmost(); 
   }
 };
+  //================================================================
+  //     Better balance recursive algorithm, needs implementation  /
+  //                                                               /
+  //                                                               /
+  //     balance(     * (a)    )   =            * (a)              /
+  //                                                               /
+  //                                                               /
+  //                 * (a)                     * (a)               /
+  //     balance(     \        )   =            \                  /
+  //                   * (b)                     * (b)             /
+  //                                                               /
+  //                                                               /
+  //                   * (a)                     * (a)             /
+  //     balance(     /        )   =            /                  /
+  //                 * (b)                     * (b)               /
+  //                                                               /
+  //                                                               /
+  //                   * (a)                     * (a)             /
+  //     balance(     / \      ) =              / \                /
+  //             (b) *   * (c)      balance(b) *   * balance(c)    /
+  //                / \ / \                   / \ / \              /
+  //                                                               /
+  //                                                               /
+  //                * (a)                                          /
+  //                 \                           * (b)             /
+  //     balance(     * (b)    )   =            / \                /
+  //                   \                   (a) *   * balance(c)    /
+  //                    * (c)                     / \              /
+  //                   / \                                         /
+  //                                                               /
+  //                                                               /
+  //                    * (a)                                      /
+  //                   /                          * (b)            /
+  //     balance(     * (b)    )  =              / \               /
+  //                 /                      (c) *   * (a)          /
+  //                * (c)                      / \                 /
+  //               / \                                             /
+  //                                                               /
+  //                                                               /
+  //                * (a)                         * (c)            /
+  //                 \                           / \               /
+  //     balance(     * (b)    )   =            /   \              /
+  //                 /                     (a) *     * (b)         /
+  //            (c) *                           \   /              /
+  //               / \                balance(d) * * balance(e)    /
+  //          (d) *   * (e)                                        /
+  //                                                               /
+  //                                                               /
+  //                    * (a)                     * (c)            /
+  //                   /                         / \               /
+  //     balance(     * (b)    )  =             /   \              /
+  //                   \                   (b) *     * (a)         /
+  //                (c) *                       \   /              /
+  //                   / \            balance(d) * * balance(e)    /
+  //              (d) *   * (e)                                    /
+  //                                                               /
+  //  where (e) and (d) might be null                              /
+  //================================================================
+
+template<typename data_t>
+__node<data_t> balance(const __node<data_t>& n) {
+  if (!n.has_left() && !n.has_right()) 
+    return __node<data_t>{n};
+  else if (n.has_left() && n.has_right())
+    return __node<data_t>{n.data, balance<data_t>(n.left, n.right)};
+  else if (n
 
 template<typename key_t, typename cmp_t, typename node_t>
 node_t* binary_search(const key_t k, const cmp_t lt, node_t* const n) {
@@ -176,34 +242,6 @@ class Tree {
       ++itr;
     return itr;
   }
-
-  //================================================================
-  //     Better balance recursive algorithm, needs implementation  /
-  //                                                               /
-  //                                                               /
-  //     balance(     *(a)     )   =             *(a)              /
-  //                                                               /
-  //                                                               /
-  //                * (a)                                          /
-  //                 \                           *(b)              /
-  //     balance(     * (b)    )   =            / \                /
-  //                   \                    (a)*   * balance(c)    /
-  //                    * (c)                                      /
-  //                                                               /
-  //                                                               /
-  //                     * (a)                                     /
-  //                    /                                          /
-  //     balance(      * (b)    )  =              * (b)            /
-  //                  /                          / \               /
-  //                 * (c)            balance(c)*   * (a)          /
-  //                                                               /
-  //                                                               /
-  //                    * (a)                     *(a)             /
-  //     balance(      / \       ) =             / \               /
-  //              (b) *   * (c)       balance(b)*   * balance(c)   /
-  //                                                               /
-  //                                                               /
-  //================================================================
   
   void balance() {
     Tree t{};
