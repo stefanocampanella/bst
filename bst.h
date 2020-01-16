@@ -78,8 +78,12 @@ struct __node {
     else              return left->leftmost(); 
   }
 };
+
   //================================================================
   //     Better balance recursive algorithm, needs implementation  /
+  //                                                               /
+  //                                                               /
+  //     balance(     x        )   =            x  (null)          /
   //                                                               /
   //                                                               /
   //     balance(     * (a)    )   =            * (a)              /
@@ -93,12 +97,6 @@ struct __node {
   //                   * (a)                     * (a)             /
   //     balance(     /        )   =            /                  /
   //                 * (b)                     * (b)               /
-  //                                                               /
-  //                                                               /
-  //                   * (a)                     * (a)             /
-  //     balance(     / \      ) =              / \                /
-  //             (b) *   * (c)      balance(b) *   * balance(c)    /
-  //                / \ / \                   / \ / \              /
   //                                                               /
   //                                                               /
   //                * (a)                                          /
@@ -135,6 +133,14 @@ struct __node {
   //              (d) *   * (e)                                    /
   //                                                               /
   //  where (e) and (d) might be null                              /
+  //                                                               /
+  //                                                               /
+  //                   * (a)                     * (a)             /
+  //     balance(     / \      ) =              / \                /
+  //             (b) *   * (c)      balance(b) *   * balance(c)    /
+  //                / \ / \                   / \ / \              /
+  //                                                               /
+  //                                                               /
   //================================================================
 
 template<typename data_t>
