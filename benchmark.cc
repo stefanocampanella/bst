@@ -11,7 +11,7 @@
 
 int main(int argc, char* argv[]) {
   try {
-    if (argc != 3)
+    if (argc != 2)
       throw std::invalid_argument{"Error: bad arguments"};
     
     size_t size;
@@ -21,7 +21,8 @@ int main(int argc, char* argv[]) {
       if (sarg.fail())
         throw std::invalid_argument("Error: bad arguments");
     }
-    
+   
+    /*
     size_t tests;
     {
       std::stringstream sarg{argv[2]};
@@ -29,6 +30,7 @@ int main(int argc, char* argv[]) {
       if (sarg.fail())
         throw std::invalid_argument("Error: bad arguments");
     }
+    */
     
     Tree<int, int> t;
     std::map<int, int> m;
@@ -44,7 +46,10 @@ int main(int argc, char* argv[]) {
     }
     t.balance();
 
-    /*
+    for(size_t n = 0; n != size; ++n) 
+      if(t[n] != m[n])
+          throw std::runtime_error("Element not found");
+
     auto max = std::max_element(m.begin(), m.end())->first;
     auto benchmark = [&max] (const auto& container) {
       auto t1 = std::chrono::high_resolution_clock::now();
@@ -54,8 +59,8 @@ int main(int argc, char* argv[]) {
         std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1);
       return elapsed.count();
     };
-    */
-
+    
+    /*
     std::vector<std::pair<const int, int>> test_cases{};
     std::sample(
         m.begin(),
@@ -68,8 +73,9 @@ int main(int argc, char* argv[]) {
       std::vector<std::chrono::nanoseconds::rep> times;
       for(const auto& x : test_cases) {
         auto t1 = std::chrono::high_resolution_clock::now();
-        if (container.find(x.first) == container.end())
-          throw std::runtime_error("Element not found");
+        //if (container.find(x.first) == container.end())
+        //  throw std::runtime_error("Element not found");
+        container.find(x.first);
         auto t2 = std::chrono::high_resolution_clock::now();
         auto elapsed = 
           std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1);
@@ -79,6 +85,7 @@ int main(int argc, char* argv[]) {
         std::accumulate(times.begin(), times.end(), 0.0) / times.size();
       return avg; 
     };
+    */
 
     std::cout << benchmark(m) << '\t' << benchmark(t) << std::endl;
     
